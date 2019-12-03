@@ -1,0 +1,166 @@
+<html>
+    <title>掘金加强搜素</title>
+    <meta charset="utf-8" />
+    <!-- <meta http-equiv="refresh" content="60"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <style>
+        #app {
+            width: 100%;
+            padding: 15px 0;
+            font-family: Microsoft YaHei, 微软雅黑, Arial;
+            color: #b2bac2;
+        }
+
+        .big-title {
+            text-align: center;
+            font-size: 27px;
+            font-weight: bold;
+            padding-bottom: 10px;
+            color: #007fff;
+            font-family: cursive;
+        }
+
+        .item {
+            width: 450px;
+            margin: 15px auto;
+            max-width: calc(100% - 30px);
+            font-size: 13px;
+            border-bottom: 1px dashed #bbb;
+        }
+
+        .item > a {
+            text-decoration: none;
+            color: #666;
+            display: inline-block;
+            line-height: 32px;
+            width: 100%;
+            padding: 5px 0;
+        }
+
+        .title {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: inline-block;
+            max-width: 100%;
+            color: #2e3135;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .likes {
+            font-size: 20px;
+            margin-right: 5px;
+        }
+        .likes > span {
+            font-size: 13px;
+            margin-left: 5px;
+            color: #007fff;
+        }
+        .time {
+            margin-right: 5px;
+        }
+
+        .foot {
+            margin-top: 10px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .search {
+            width: 220px;
+            margin: 0 auto;
+        }
+        [v-cloak] {
+            display: none;
+        }
+
+        .bg-rotate-loader {
+            margin: 20px auto;
+            width: 50px;
+            height: 50px;
+            box-sizing: border-box;
+            border: 5px solid #b8d0fa;
+            border-top-color: #007fff;
+            border-radius: 50%;
+            animation: bg-loader-rotate 1s linear infinite;
+        }
+
+        @keyframes bg-loader-rotate {
+            0% {
+                transform: rotate(0);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" />
+    <body>
+        <div id="app">
+            <div class="big-title">掘金高级搜索</div>
+
+            <div class="search">
+                <el-input v-model="input" placeholder="请输入内容">
+                    <el-button slot="append" icon="el-icon-search" v-on:click="getData"></el-button>
+                </el-input>
+            </div>
+            <div class="bg-rotate-loader" v-show="showLoading"></div>
+            <div v-cloak>
+                <div v-for="(item,index) in list" class="item">
+                    <div>
+                        <span class="likes">👍<span v-text="item.likeCount"></span></span>
+                        <span v-text="item.time" class="time"></span>
+                        <span v-text="item.user.username"></span>
+                    </div>
+                    <a :href="item.originalUrl" target="_blank" rel="noopener noreferrer">
+                        <div>
+                            <span v-text="item.title" class="title"></span>
+                        </div>
+                    </a>
+                </div>
+                <div class="foot">调用掘金查询接口，返回过滤后的查询结果</div>
+            </div>
+        </div>
+    </body>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script>
+        function getTimes(date) {
+            let newDate = new Date(date);
+            let years = newDate.getFullYear();
+            let month = newDate.getMonth();
+            let day = newDate.getDate();
+            return years + "." + month + "." + day;
+        }
+        var app = new Vue({
+            el: "#app",
+            data: {
+                list: [],
+                showLoading: false,
+                input: ""
+            },
+            methods: {
+                getData: function() {
+                    this.showLoading = true;
+                    this.list = [];
+                    $.ajax({
+                        url: "http://localhost:3000/" + this.input + "-66",
+                        type: "get",
+                        dataType: "json",
+                        success: res => {
+                            let dataList = res.map(({ node: { entity } }) => {
+                                entity.time = getTimes(entity.createdAt);
+                                return entity;
+                            });
+                            this.showLoading = false;
+                            this.list = dataList;
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+</html>
