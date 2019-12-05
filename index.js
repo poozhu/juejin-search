@@ -22,21 +22,36 @@ function sortList(a, b) {
     return b.node.entity.createdAt > a.node.entity.createdAt ? 1 : -1;
 }
 
-function getData(queryKey = "前端", likeNum = 1000) {
+function getDatas({ queryKey, numAfter }) {
     let url = "https://web-api.juejin.im/query";
     let params = {
         extensions: { query: { id: "a53db5867466eddc50d16a38cfeb0890" } },
         operationName: "",
         query: "",
-        variables: { type: "ALL", query: queryKey, after: "", period: "ALL", first: 100 }
+        variables: { type: "ARTICLE", query: queryKey, after: numAfter + "", period: "ALL", first: 100 }
     };
+    return axios.post(url, params, {
+        headers: { "X-Agent": "Juejin/Web" }
+    });
+}
+
+function responseData(queryKey = "前端", likeNum = 1000) {
     return axios
-        .post(url, params, {
-            headers: { "X-Agent": "Juejin/Web" }
-        })
+        .all([
+            getDatas({ queryKey: queryKey, numAfter: 0 }),
+            getDatas({ queryKey: queryKey, numAfter: 100 }),
+            getDatas({ queryKey: queryKey, numAfter: 200 })
+        ])
+        .then(
+            axios.spread((res1, res2, res3) => {
+                let dataArr1 = res1.data.data.search.edges;
+                let dataArr2 = res2.data.data.search.edges;
+                let dataArr3 = res3.data.data.search.edges;
+                return Promise.resolve([...dataArr1, ...dataArr2, ...dataArr3]);
+            })
+        )
         .then(function(response) {
-            let dataArr = response.data.data.search.edges;
-            let newInfo = dataArr.filter(
+            let newInfo = response.filter(
                 ({ node: { entity } }) =>
                     timeFilter(entity, "createdAt") &&
                     // includeTest(entity, "title", "前端") &&
@@ -51,17 +66,17 @@ function getData(queryKey = "前端", likeNum = 1000) {
 }
 
 app.get("/", (req, res) => {
-    let promise = getData(); // 发起抓取
+    let promise = responseData(); // 发起抓取
     promise.then(response => {
         res.json(response); // 数据返回
     });
 });
-app.get("/:queryKey-:likeNum", (req, res) => {
+app.get("/:queryKey/:likeNum", (req, res) => {
     const {
         queryKey, // 获取查询关键词
         likeNum // 获取点赞数下限
     } = req.params;
-    let promise = getData(queryKey, likeNum); // 发起抓取
+    let promise = responseData(queryKey, likeNum); // 发起抓取
     promise.then(response => {
         res.json(response); // 数据返回
     });
