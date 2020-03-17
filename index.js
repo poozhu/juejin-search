@@ -35,7 +35,7 @@ function getDatas({ queryKey, numAfter }) {
     });
 }
 
-function responseData(queryKey = "前端", likeNum = 1000) {
+function getData(queryKey = "前端", likeNum = 1000) {
     return axios
         .all([
             getDatas({ queryKey: queryKey, numAfter: 0 }),
@@ -66,7 +66,7 @@ function responseData(queryKey = "前端", likeNum = 1000) {
 }
 
 app.get("/", (req, res) => {
-    let promise = responseData(); // 发起抓取
+    let promise = getData(); // 发起抓取
     promise.then(response => {
         res.json(response); // 数据返回
     });
@@ -76,7 +76,7 @@ app.get("/:queryKey/:likeNum", (req, res) => {
         queryKey, // 获取查询关键词
         likeNum // 获取点赞数下限
     } = req.params;
-    let promise = responseData(queryKey, likeNum); // 发起抓取
+    let promise = getData(queryKey, likeNum); // 发起抓取
     promise.then(response => {
         res.json(response); // 数据返回
     });
