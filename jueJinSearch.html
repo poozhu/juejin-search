@@ -1,7 +1,6 @@
 <html>
-    <title>掘金加强搜素</title>
+    <title>掘金高级搜素</title>
     <meta charset="utf-8" />
-    <!-- <meta http-equiv="refresh" content="60"> -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
     <style>
         #app {
@@ -96,13 +95,13 @@
             }
         }
     </style>
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-ui@2.13.0/lib/theme-chalk/index.css" />
     <body>
         <div id="app">
             <div class="big-title">掘金高级搜索</div>
 
             <div class="search">
-                <el-input v-model="input" placeholder="请输入内容">
+                <el-input v-model="input" v-on:change="getData" placeholder="请输入内容">
                     <el-button slot="append" icon="el-icon-search" v-on:click="getData"></el-button>
                 </el-input>
             </div>
@@ -124,43 +123,49 @@
             </div>
         </div>
     </body>
-    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/element-ui@2.13.0/lib/index.js"></script>
     <script>
+        // 创建展示的时间
         function getTimes(date) {
             let newDate = new Date(date);
             let years = newDate.getFullYear();
-            let month = newDate.getMonth();
+            let month = newDate.getMonth() + 1;
             let day = newDate.getDate();
             return years + "." + month + "." + day;
         }
+
+        // Vue 实例
         var app = new Vue({
             el: "#app",
             data: {
                 list: [],
                 showLoading: false,
-                input: ""
+                input: "",
             },
             methods: {
-                getData: function() {
+                getData: function () {
+                    if (!this.input) {
+                        return;
+                    }
                     this.showLoading = true;
                     this.list = [];
                     $.ajax({
                         url: "http://localhost:3000/" + this.input + "-66",
                         type: "get",
                         dataType: "json",
-                        success: res => {
+                        success: (res) => {
                             let dataList = res.map(({ node: { entity } }) => {
                                 entity.time = getTimes(entity.createdAt);
                                 return entity;
                             });
                             this.showLoading = false;
                             this.list = dataList;
-                        }
+                        },
                     });
-                }
-            }
+                },
+            },
         });
     </script>
 </html>
