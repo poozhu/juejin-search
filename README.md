@@ -10,7 +10,7 @@
 1.拉取本项目
 
 ```
-git clone https://github.com/ZY2071/JueJin-Search.git
+git clone https://github.com/poozhu/JueJin-Search.git
 cd JueJin-Search
 npm i
 node index.js
