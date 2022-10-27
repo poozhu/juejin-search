@@ -3,7 +3,7 @@
 
 例如搜索技术相关关键词，‘前端’，‘后端’，‘Java’，‘MongoDB’，‘ES6’，‘three.js’等，即可拿到社区内相关且内容质量相对较高的文章，方便搜索相关教程/资料（对比直接在搜索引擎盲搜或用官方的搜索工具，可能此搜索可以提高获取资料的效率）。
 
-# Usage
+## Usage
 
 首先保证电脑已存在 node10.0+ 环境，然后
 
@@ -24,7 +24,7 @@ npm i
 node index.js
 ```
 
-# Examples
+## Examples
 
 当启动项目后，可以看到控制台输出
 
@@ -35,3 +35,7 @@ Listening on port 3000!
 之后用浏览器或双击打开根目录下的 jueJinSearch.html 文件
 
 稍微等待即可使用搜索功能
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=poozhu/JueJin-Search&type=Date)](https://star-history.com/#poozhu/JueJin-Search&Date)
