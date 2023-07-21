@@ -10,8 +10,8 @@
 1.拉取本项目
 
 ```
-git clone https://github.com/poozhu/JueJin-Search.git
-cd JueJin-Search
+git clone https://github.com/poozhu/juejin-search.git
+cd juejin-search
 npm i
 node index.js
 ```
@@ -19,7 +19,7 @@ node index.js
 2.或者下载本项目压缩包，解压
 
 ```
-cd JueJin-Search-master  // 进入项目文件夹
+cd juejin-search-master  // 进入项目文件夹
 npm i
 node index.js
 ```
@@ -38,4 +38,4 @@ Listening on port 3000!
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=poozhu/JueJin-Search&type=Date)](https://star-history.com/#poozhu/JueJin-Search&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=poozhu/juejin-search&type=Date)](https://star-history.com/#poozhu/juejin-search&Date)
