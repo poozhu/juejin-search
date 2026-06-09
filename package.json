@@ -1,7 +1,7 @@
 {
-  "name": "githubapi",
+  "name": "juejin-search",
   "version": "1.0.0",
-  "description": "API for Github Trending",
+  "description": "掘金高级搜索 - 按点赞数和时间过滤掘金文章",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,8 +9,7 @@
   "author": "zy_2071",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.30.2",
-    "cheerio": "^1.0.0-rc.3",
+    "axios": "^0.32.0",
     "cors": "^2.8.5",
     "express": "^4.16.4"
   }
